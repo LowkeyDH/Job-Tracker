@@ -1,5 +1,6 @@
 # Career Tracker Pro
 
+
 A smart job tracking application powered by AI agents. Built with a composable agent architecture, enabling intelligent resume analysis and job matching.
 
 ## Overview
