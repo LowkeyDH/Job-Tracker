@@ -21,12 +21,12 @@ Core features:
 | Frontend | React + Vite + Tailwind CSS                                                |
 | Backend  | Node.js + Express                                                          |
 | Database | MySQL (local) / PlanetScale (production)                                   |
-| AI Model | Kimi K2 (`moonshotai/Kimi-K2-Instruct-0905`) via HuggingFace Inference API |
+| AI Model | Llama 3.1 8B (`llama-3.1-8b-instant`) via Groq Inference API              |
 
 ## Agent Architecture
 
 - **Resume Agent** — Parses resume, extracts skills, experience, and education
-- **Match Agent** _(coming soon)_ — Scores resume against job requirements
+- **Match Agent** — Scores resume against job requirements, highlights matching and missing skills
 - **Recommend Agent** _(coming soon)_ — Generates personalized job recommendations
 
 Each agent is independent and can be swapped or extended individually.
@@ -37,7 +37,7 @@ Each agent is independent and can be swapped or extended individually.
 
 - Node.js 18+
 - MySQL 8.0+
-- A free [HuggingFace](https://huggingface.co) account and API token
+- A free [Groq](https://console.groq.com) account and API key
 
 ### Backend Setup
 
@@ -45,7 +45,7 @@ Each agent is independent and can be swapped or extended individually.
 cd backend
 npm install
 cp .env.example .env
-# Fill in your DB credentials and HF_TOKEN in .env
+# Fill in your DB credentials and GROQ_API_KEY in .env
 node src/app.js
 ```
 
@@ -66,7 +66,7 @@ DB_PORT=3306
 DB_USER=your-db-user
 DB_PASSWORD=your-db-password
 DB_NAME=job_tracker
-HF_TOKEN=hf_...
+GROQ_API_KEY=gsk_...
 ```
 
 ## Future Plans
