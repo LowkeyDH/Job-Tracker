@@ -1,50 +1,76 @@
 # Job Smart Tracker
 
-A smart job tracking application powered by AI agents. Built with Claude Agent SDK (Anthropic ADK), enabling intelligent resume analysis and job matching through composable AI agents.
+A smart job tracking application powered by AI agents. Built with a composable agent architecture, enabling intelligent resume analysis and job matching.
 
-## 项目概述
+## Overview
 
-该项目是一个 AI 驱动的求职追踪系统，集成 Claude Agent SDK（Anthropic ADK），支持导入和扩展自定义 Agent 来完成不同的智能任务。
+Job Smart Tracker is an AI-powered job application management system. It lets users track job applications, upload resumes for AI analysis, and get insights on their skills and experience.
 
-核心功能：
+Core features:
 
-- 上传简历后，由 OpenAI 分析简历内容
-- 通过 Claude Agent SDK 构建可组合的 AI Agent 流程
-- 匹配适合用户的工作机会
-- 提供个性化的工作推荐
-- 准备部署到线上环境
+- Upload a resume and have it analyzed by AI (skills, experience, education extraction)
+- Track job applications with status updates (Applied, Interview, Offer, Rejected)
+- Composable AI agent architecture for resume analysis, job matching, and recommendations
+- Deployable to the web
 
-## Agent 架构
+## Tech Stack
 
-本项目支持通过 Claude Agent SDK 导入和扩展 Agent：
+| Layer | Technology |
+|---|---|
+| Frontend | React + Vite + Tailwind CSS |
+| Backend | Node.js + Express |
+| Database | MySQL (local) / PlanetScale (production) |
+| AI Model | Kimi K2 (`moonshotai/Kimi-K2-Instruct-0905`) via HuggingFace Inference API |
 
-- **Resume Agent** — 负责解析简历、提取技能与经验
-- **Match Agent** — 负责将简历与职位要求进行匹配评分
-- **Recommend Agent** — 负责生成个性化职位推荐与理由
+## Agent Architecture
 
-每个 Agent 职责独立，可单独替换或扩展。
+- **Resume Agent** — Parses resume, extracts skills, experience, and education
+- **Match Agent** _(coming soon)_ — Scores resume against job requirements
+- **Recommend Agent** _(coming soon)_ — Generates personalized job recommendations
 
-## 目标用户
+Each agent is independent and can be swapped or extended individually.
 
-- 求职者
-- 职业顾问
-- 人力资源团队
+## Getting Started
 
-## 主要功能
+### Prerequisites
 
-1. 从简历中提取技能、经验、教育背景等信息
-2. 基于用户简历与职位要求进行匹配
-3. 生成与用户能力最契合的职位列表
-4. 支持后续扩展为在线服务
+- Node.js 18+
+- MySQL 8.0+
+- A free [HuggingFace](https://huggingface.co) account and API token
 
-## 未来方向
+### Backend Setup
 
-- 部署为线上 Web 服务
-- 添加用户认证与简历上传功能
-- 集成职位搜索 API
-- 提供职位匹配评分与匹配理由
+```bash
+cd backend
+npm install
+cp .env.example .env
+# Fill in your DB credentials and HF_TOKEN in .env
+node src/app.js
+```
 
-## 使用说明
+### Frontend Setup
 
-1. 该项目目前为 AI agent 交互与方案设计文档。
-2. 后续可补充项目结构、接口说明与部署指南。
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Environment Variables
+
+```
+PORT=3000
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=your-db-user
+DB_PASSWORD=your-db-password
+DB_NAME=job_tracker
+HF_TOKEN=hf_...
+```
+
+## Future Plans
+
+- Deploy as a live web service (PlanetScale + Render/Railway)
+- Add user authentication
+- Integrate job search API
+- Add job match scoring with explanations
