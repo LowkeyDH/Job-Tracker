@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAnalysis } from '../api/resume';
+import { getAllJobs } from '../api/jobs';
 
 export default function ResumeResult() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [selectedJobId, setSelectedJobId] = useState('');
 
   useEffect(() => {
     getAnalysis(id).then((res) => setData(res.data));
+    getAllJobs().then((res) => setJobs(res.data));
   }, [id]);
 
   if (!data) return (
@@ -81,11 +85,41 @@ export default function ResumeResult() {
             </div>
           </div>
 
+          {/* Match with Job */}
+          {jobs.length > 0 && (
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
+              <h2 className="text-white font-semibold text-lg mb-4 flex items-center gap-2">
+                <span className="text-cyan-400">🎯</span> Match with a Job
+              </h2>
+              <div className="flex gap-3">
+                <select
+                  value={selectedJobId}
+                  onChange={(e) => setSelectedJobId(e.target.value)}
+                  className="flex-1 bg-white/5 border border-white/10 text-slate-300 rounded-xl px-4 py-2.5 focus:outline-none focus:border-purple-500/50"
+                >
+                  <option value="">Select a job...</option>
+                  {jobs.map((job) => (
+                    <option key={job.id} value={job.id}>
+                      {job.company} — {job.title}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  disabled={!selectedJobId}
+                  onClick={() => navigate(`/match/${id}/${selectedJobId}`)}
+                  className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white px-6 py-2.5 rounded-xl font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Match
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
 
         <button
           onClick={() => navigate('/upload')}
-          className="mt-8 w-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/30"
+          className="mt-8 w-full bg-white/5 border border-white/10 text-slate-300 py-3 rounded-xl font-semibold hover:bg-white/10 transition"
         >
           Upload Another Resume
         </button>

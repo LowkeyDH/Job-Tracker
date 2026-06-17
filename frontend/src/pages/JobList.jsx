@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllJobs, deleteJob } from '../api/jobs';
+import { getAllJobs, deleteJob, updateJob } from '../api/jobs';
 
 const statusConfig = {
   applied:   { label: 'Applied',   classes: 'bg-blue-500/20 text-blue-300 border border-blue-500/30' },
@@ -19,6 +19,11 @@ export default function JobList() {
   const handleDelete = async (id) => {
     await deleteJob(id);
     setJobs(jobs.filter((job) => job.id !== id));
+  };
+
+  const handleStatusChange = async (job, newStatus) => {
+    await updateJob(job.id, { ...job, status: newStatus });
+    setJobs(jobs.map((j) => j.id === job.id ? { ...j, status: newStatus } : j));
   };
 
   const counts = {
@@ -101,9 +106,16 @@ export default function JobList() {
                     <td className="px-6 py-4 font-semibold text-white">{job.company}</td>
                     <td className="px-6 py-4 text-slate-300">{job.title}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusConfig[job.status]?.classes}`}>
-                        {statusConfig[job.status]?.label}
-                      </span>
+                      <select
+                        value={job.status}
+                        onChange={(e) => handleStatusChange(job, e.target.value)}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold bg-transparent border-0 cursor-pointer focus:outline-none ${statusConfig[job.status]?.classes}`}
+                      >
+                        <option value="applied">Applied</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
                     </td>
                     <td className="px-6 py-4">
                       <button

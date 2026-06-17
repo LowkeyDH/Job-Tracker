@@ -3,6 +3,7 @@ import JobList from './pages/JobList';
 import AddJob from './pages/AddJob';
 import UploadResume from './pages/UploadResume';
 import ResumeResult from './pages/ResumeResult';
+import MatchResult from './pages/MatchResult';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/add" element={<AddJob />} />
         <Route path="/upload" element={<UploadResume />} />
         <Route path="/resume/:id" element={<ResumeResult />} />
+        <Route path="/match/:resumeId/:jobId" element={<MatchResult />} />
       </Routes>
     </BrowserRouter>
   );

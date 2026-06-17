@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const jobRoutes = require('./routes/jobs');
 const resumeRoutes = require('./routes/resume');
+const matchRoutes = require('./routes/match');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/jobs', jobRoutes);
 app.use('/api/resume', resumeRoutes);
+app.use('/api/match', matchRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
