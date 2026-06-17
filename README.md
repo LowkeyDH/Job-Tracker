@@ -1,4 +1,4 @@
-# Job Smart Tracker
+# My Smart Tracker
 
 A smart job tracking application powered by AI agents. Built with a composable agent architecture, enabling intelligent resume analysis and job matching.
 
@@ -15,11 +15,11 @@ Core features:
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React + Vite + Tailwind CSS |
-| Backend | Node.js + Express |
-| Database | MySQL (local) / PlanetScale (production) |
+| Layer    | Technology                                                                 |
+| -------- | -------------------------------------------------------------------------- |
+| Frontend | React + Vite + Tailwind CSS                                                |
+| Backend  | Node.js + Express                                                          |
+| Database | MySQL (local) / PlanetScale (production)                                   |
 | AI Model | Kimi K2 (`moonshotai/Kimi-K2-Instruct-0905`) via HuggingFace Inference API |
 
 ## Agent Architecture
