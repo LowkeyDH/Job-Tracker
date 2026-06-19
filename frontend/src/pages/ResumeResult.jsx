@@ -118,8 +118,15 @@ export default function ResumeResult() {
         </div>
 
         <button
+          onClick={() => navigate(`/career/${id}`)}
+          className="mt-8 w-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/30"
+        >
+          Analyze Career Fit →
+        </button>
+
+        <button
           onClick={() => navigate('/upload')}
-          className="mt-8 w-full bg-white/5 border border-white/10 text-slate-300 py-3 rounded-xl font-semibold hover:bg-white/10 transition"
+          className="mt-3 w-full bg-white/5 border border-white/10 text-slate-300 py-3 rounded-xl font-semibold hover:bg-white/10 transition"
         >
           Upload Another Resume
         </button>

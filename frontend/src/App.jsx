@@ -4,6 +4,7 @@ import AddJob from './pages/AddJob';
 import UploadResume from './pages/UploadResume';
 import ResumeResult from './pages/ResumeResult';
 import MatchResult from './pages/MatchResult';
+import CareerMatch from './pages/CareerMatch';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/upload" element={<UploadResume />} />
         <Route path="/resume/:id" element={<ResumeResult />} />
         <Route path="/match/:resumeId/:jobId" element={<MatchResult />} />
+        <Route path="/career/:resumeId" element={<CareerMatch />} />
       </Routes>
     </BrowserRouter>
   );
