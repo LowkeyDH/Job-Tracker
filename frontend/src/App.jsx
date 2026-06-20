@@ -7,6 +7,8 @@ import MatchResult from './pages/MatchResult';
 import CareerMatch from './pages/CareerMatch';
 import ATSAnalyzer from './pages/ATSAnalyzer';
 import JobSearch from './pages/JobSearch';
+import AdminFeedback from './pages/AdminFeedback';
+import FeedbackButton from './components/FeedbackButton';
 
 export default function App() {
   return (
@@ -20,7 +22,9 @@ export default function App() {
         <Route path="/career/:resumeId" element={<CareerMatch />} />
         <Route path="/ats/:resumeId" element={<ATSAnalyzer />} />
         <Route path="/search" element={<JobSearch />} />
+        <Route path="/admin" element={<AdminFeedback />} />
       </Routes>
+      <FeedbackButton />
     </BrowserRouter>
   );
 }

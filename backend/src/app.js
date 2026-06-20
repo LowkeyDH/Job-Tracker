@@ -9,6 +9,7 @@ const matchRoutes = require('./routes/match');
 const careerRoutes = require('./routes/career');
 const atsRoutes = require('./routes/ats');
 const jobSearchRoutes = require('./routes/jobSearch');
+const feedbackRoutes = require('./routes/feedback');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use('/api/match', matchRoutes);
 app.use('/api/career', careerRoutes);
 app.use('/api/ats', atsRoutes);
 app.use('/api/search', jobSearchRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 const initDB = async () => {
   await pool.query(`
@@ -44,6 +46,14 @@ const initDB = async () => {
       id SERIAL PRIMARY KEY,
       filename VARCHAR(255) NOT NULL,
       analysis JSONB,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS feedback (
+      id SERIAL PRIMARY KEY,
+      rating INTEGER NOT NULL,
+      message TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
