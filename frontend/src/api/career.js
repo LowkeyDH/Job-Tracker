@@ -1,6 +1,3 @@
-import axios from 'axios';
+import client from './client';
 
-const API = axios.create({ baseURL: import.meta.env.VITE_API_URL });
-
-export const analyzeCareer = (resumeId) =>
-  API.post('/career', { resumeId });
+export const analyzeCareer = (resumeId) => client.post('/career', { resumeId });

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAllJobs, deleteJob, updateJob } from '../api/jobs';
+import { useAuth } from '../context/AuthContext';
 
 const statusConfig = {
   applied:   { label: 'Applied',   classes: 'bg-blue-500/20 text-blue-300 border border-blue-500/30' },
@@ -10,7 +11,11 @@ const statusConfig = {
 };
 
 export default function JobList() {
+  const { email, logout } = useAuth();
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
+
+  const handleLogout = () => { logout(); navigate('/login'); };
 
   useEffect(() => {
     getAllJobs().then((res) => setJobs(res.data));
@@ -43,9 +48,15 @@ export default function JobList() {
             <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
               Job Smart Tracker
             </h1>
-            <p className="text-slate-400 mt-1 text-sm">Built with Claude Agent SDK </p>
+            <p className="text-slate-400 mt-1 text-sm">{email}</p>
           </div>
           <div className="flex gap-3">
+            <button
+              onClick={handleLogout}
+              className="bg-white/5 border border-white/10 text-slate-400 px-5 py-2.5 rounded-xl font-semibold hover:bg-white/10 hover:text-white transition text-sm"
+            >
+              Sign Out
+            </button>
             <Link
               to="/search"
               className="bg-white/5 border border-white/10 text-slate-300 px-5 py-2.5 rounded-xl font-semibold hover:bg-white/10 transition"

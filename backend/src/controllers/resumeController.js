@@ -52,8 +52,8 @@ const uploadResume = async (req, res) => {
     const analysis = JSON.parse(jsonText);
 
     const result = await pool.query(
-      'INSERT INTO resumes (filename, analysis) VALUES ($1, $2) RETURNING id',
-      [req.file.originalname, JSON.stringify(analysis)]
+      'INSERT INTO resumes (filename, analysis, user_id) VALUES ($1, $2, $3) RETURNING id',
+      [req.file.originalname, JSON.stringify(analysis), req.user.id]
     );
 
     fs.unlinkSync(req.file.path);
@@ -66,7 +66,7 @@ const uploadResume = async (req, res) => {
 
 const getAnalysis = async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM resumes WHERE id = $1', [req.params.id]);
+    const result = await pool.query('SELECT * FROM resumes WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Resume not found' });
     const row = result.rows[0];
     const analysis = typeof row.analysis === 'string' ? JSON.parse(row.analysis) : row.analysis;

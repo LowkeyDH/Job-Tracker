@@ -1,13 +1,11 @@
-import axios from 'axios';
-
-const API = axios.create({ baseURL: import.meta.env.VITE_API_URL });
+import client from './client';
 
 export const uploadResume = (file) => {
   const formData = new FormData();
   formData.append('resume', file);
-  return API.post('/resume/upload', formData, {
+  return client.post('/resume/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
 
-export const getAnalysis = (id) => API.get(`/resume/${id}/analysis`);
+export const getAnalysis = (id) => client.get(`/resume/${id}/analysis`);

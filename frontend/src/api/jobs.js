@@ -1,8 +1,6 @@
-import axios from 'axios';
+import client from './client';
 
-const API = axios.create({ baseURL: import.meta.env.VITE_API_URL });
-
-export const getAllJobs = () => API.get('/jobs');
-export const createJob = (data) => API.post('/jobs', data);
-export const updateJob = (id, data) => API.put(`/jobs/${id}`, data);
-export const deleteJob = (id) => API.delete(`/jobs/${id}`);
+export const getAllJobs = () => client.get('/jobs');
+export const createJob = (data) => client.post('/jobs', data);
+export const updateJob = (id, data) => client.put(`/jobs/${id}`, data);
+export const deleteJob = (id) => client.delete(`/jobs/${id}`);

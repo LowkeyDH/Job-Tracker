@@ -10,6 +10,7 @@ const careerRoutes = require('./routes/career');
 const atsRoutes = require('./routes/ats');
 const jobSearchRoutes = require('./routes/jobSearch');
 const feedbackRoutes = require('./routes/feedback');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,8 +29,17 @@ app.use('/api/career', careerRoutes);
 app.use('/api/ats', atsRoutes);
 app.use('/api/search', jobSearchRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/auth', authRoutes);
 
 const initDB = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password_hash VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS jobs (
       id SERIAL PRIMARY KEY,
@@ -49,6 +59,8 @@ const initDB = async () => {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  await pool.query(`ALTER TABLE jobs ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE CASCADE`);
+  await pool.query(`ALTER TABLE resumes ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE CASCADE`);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS feedback (
       id SERIAL PRIMARY KEY,
