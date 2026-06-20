@@ -24,7 +24,7 @@ export default function UploadResume() {
       const res = await uploadResume(file);
       navigate(`/resume/${res.data.id}`);
     } catch (err) {
-      setError(err.response?.data?.error || 'Upload failed. Check your HuggingFace token.');
+      setError(err.response?.data?.error || 'Upload failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -54,7 +54,7 @@ export default function UploadResume() {
             <input
               ref={inputRef}
               type="file"
-              accept=".txt,.pdf,.doc,.docx"
+              accept=".pdf,.docx"
               className="hidden"
               onChange={(e) => setFile(e.target.files[0])}
             />
@@ -68,7 +68,7 @@ export default function UploadResume() {
               <div>
                 <p className="text-4xl mb-3">⬆️</p>
                 <p className="text-slate-300 font-medium">Drop your resume here</p>
-                <p className="text-slate-500 text-sm mt-1">or click to browse — .txt, .pdf, .doc</p>
+                <p className="text-slate-500 text-sm mt-1">or click to browse — .pdf, .docx</p>
               </div>
             )}
           </div>

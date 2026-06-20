@@ -12,8 +12,9 @@ const analyzeCareer = async (req, res) => {
   if (!resumeId) return res.status(400).json({ error: 'resumeId is required' });
 
   try {
-    const [[resume]] = await pool.query('SELECT * FROM resumes WHERE id = ?', [resumeId]);
-    if (!resume) return res.status(404).json({ error: 'Resume not found' });
+    const resumeResult = await pool.query('SELECT * FROM resumes WHERE id = $1', [resumeId]);
+    if (resumeResult.rows.length === 0) return res.status(404).json({ error: 'Resume not found' });
+    const resume = resumeResult.rows[0];
 
     const analysis = typeof resume.analysis === 'string'
       ? JSON.parse(resume.analysis)

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const pool = require('./db/connection');
 
 const jobRoutes = require('./routes/jobs');
 const resumeRoutes = require('./routes/resume');
@@ -26,6 +27,36 @@ app.use('/api/career', careerRoutes);
 app.use('/api/ats', atsRoutes);
 app.use('/api/search', jobSearchRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+const initDB = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS jobs (
+      id SERIAL PRIMARY KEY,
+      company VARCHAR(255) NOT NULL,
+      title VARCHAR(255) NOT NULL,
+      status VARCHAR(50) DEFAULT 'applied',
+      url TEXT,
+      notes TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS resumes (
+      id SERIAL PRIMARY KEY,
+      filename VARCHAR(255) NOT NULL,
+      analysis JSONB,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  console.log('Database tables ready');
+};
+
+initDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to initialize database:', err.message);
+    process.exit(1);
+  });

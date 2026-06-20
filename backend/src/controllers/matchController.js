@@ -14,13 +14,15 @@ const matchResume = async (req, res) => {
   }
 
   try {
-    const [[resume]] = await pool.query('SELECT * FROM resumes WHERE id = ?', [resumeId]);
-    if (!resume) return res.status(404).json({ error: 'Resume not found' });
+    const resumeResult = await pool.query('SELECT * FROM resumes WHERE id = $1', [resumeId]);
+    if (resumeResult.rows.length === 0) return res.status(404).json({ error: 'Resume not found' });
+    const resume = resumeResult.rows[0];
 
-    const [[job]] = await pool.query('SELECT * FROM jobs WHERE id = ?', [jobId]);
-    if (!job) return res.status(404).json({ error: 'Job not found' });
+    const jobResult = await pool.query('SELECT * FROM jobs WHERE id = $1', [jobId]);
+    if (jobResult.rows.length === 0) return res.status(404).json({ error: 'Job not found' });
+    const job = jobResult.rows[0];
 
-    const analysis = JSON.parse(resume.analysis);
+    const analysis = typeof resume.analysis === 'string' ? JSON.parse(resume.analysis) : resume.analysis;
 
     const completion = await client.chat.completions.create({
       model: 'llama-3.1-8b-instant',

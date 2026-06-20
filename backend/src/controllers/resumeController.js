@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { PdfReader } = require('pdfreader');
+const mammoth = require('mammoth');
 const OpenAI = require('openai');
 const pool = require('../db/connection');
 
@@ -22,10 +23,18 @@ const uploadResume = async (req, res) => {
 
   try {
     const fileBuffer = fs.readFileSync(req.file.path);
-    const isPdf = req.file.originalname.toLowerCase().endsWith('.pdf');
-    const fileContent = isPdf
-      ? await extractPdfText(fileBuffer)
-      : fileBuffer.toString('utf-8');
+    const fileName = req.file.originalname.toLowerCase();
+    let fileContent;
+
+    if (fileName.endsWith('.pdf')) {
+      fileContent = await extractPdfText(fileBuffer);
+    } else if (fileName.endsWith('.docx')) {
+      const result = await mammoth.extractRawText({ buffer: fileBuffer });
+      fileContent = result.value;
+    } else {
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({ error: 'Unsupported file type. Please upload a PDF or Word (.docx) file.' });
+    }
 
     const completion = await client.chat.completions.create({
       model: 'llama-3.1-8b-instant',
@@ -42,14 +51,14 @@ const uploadResume = async (req, res) => {
     const jsonText = rawText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
     const analysis = JSON.parse(jsonText);
 
-    const [result] = await pool.query(
-      'INSERT INTO resumes (filename, analysis) VALUES (?, ?)',
+    const result = await pool.query(
+      'INSERT INTO resumes (filename, analysis) VALUES ($1, $2) RETURNING id',
       [req.file.originalname, JSON.stringify(analysis)]
     );
 
     fs.unlinkSync(req.file.path);
 
-    res.status(201).json({ id: result.insertId, analysis });
+    res.status(201).json({ id: result.rows[0].id, analysis });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -57,12 +66,11 @@ const uploadResume = async (req, res) => {
 
 const getAnalysis = async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM resumes WHERE id = ?', [req.params.id]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Resume not found' });
-    const analysis = typeof rows[0].analysis === 'string'
-      ? JSON.parse(rows[0].analysis)
-      : rows[0].analysis;
-    res.json({ ...rows[0], analysis });
+    const result = await pool.query('SELECT * FROM resumes WHERE id = $1', [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Resume not found' });
+    const row = result.rows[0];
+    const analysis = typeof row.analysis === 'string' ? JSON.parse(row.analysis) : row.analysis;
+    res.json({ ...row, analysis });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
