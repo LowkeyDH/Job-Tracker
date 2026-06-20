@@ -125,6 +125,13 @@ export default function ResumeResult() {
         </button>
 
         <button
+          onClick={() => navigate(`/ats/${id}`)}
+          className="mt-3 w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition shadow-lg shadow-amber-500/30"
+        >
+          Check ATS Score →
+        </button>
+
+        <button
           onClick={() => navigate('/upload')}
           className="mt-3 w-full bg-white/5 border border-white/10 text-slate-300 py-3 rounded-xl font-semibold hover:bg-white/10 transition"
         >

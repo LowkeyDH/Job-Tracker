@@ -47,6 +47,12 @@ export default function JobList() {
           </div>
           <div className="flex gap-3">
             <Link
+              to="/search"
+              className="bg-white/5 border border-white/10 text-slate-300 px-5 py-2.5 rounded-xl font-semibold hover:bg-white/10 transition"
+            >
+              Search Jobs
+            </Link>
+            <Link
               to="/upload"
               className="bg-white/5 border border-white/10 text-slate-300 px-5 py-2.5 rounded-xl font-semibold hover:bg-white/10 transition"
             >
